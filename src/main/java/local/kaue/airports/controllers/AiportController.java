@@ -1,6 +1,7 @@
 package local.kaue.airports.controllers;
 
 import java.util.List;
+import local.kaue.airports.DTO.AirportMinDTO;
 import local.kaue.airports.entities.Airport;
 import local.kaue.airports.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,23 @@ public class AiportController {
         
         }
     }
+    @GetMapping("/country/{countryName}")
+    public ResponseEntity<List<AirportMinDTO>> findCountryIgnoreCase(@PathVariable String countryName) {
+       
+        List<AirportMinDTO> result = airportService.findByCountry(countryName); 
+        if(result.isEmpty()){
+            //ops... lista vazia...
+            // not found devolve404
+            return ResponseEntity.notFound().build();
+            
+        }else{
+            //eba tem dados
+            //eba devolve 200
+            return ResponseEntity.ok(result);
+        
+        }
+    }
+    
+    
 
 }
