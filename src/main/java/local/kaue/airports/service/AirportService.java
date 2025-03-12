@@ -10,12 +10,12 @@ import local.kaue.airports.repositories.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 /**
  *
  * @author sesideva
  */
 @Service
-
 public class AirportService {
     @Autowired
     private AirportRepository airportRepository;
@@ -26,4 +26,15 @@ public class AirportService {
                 return result;
     }
     
+    
+    /**
+     * Retorna DTO airports filtrados por cidade 
+     * @param city
+     * @return
+     */
+    public List<Airport> findByCity(String city){
+        List<Airport> result = airportRepository.findByCityIgnoreCase(city);
+        return result;
+    }
+  
 }
