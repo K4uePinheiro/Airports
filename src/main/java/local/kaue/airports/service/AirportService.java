@@ -6,7 +6,9 @@ package local.kaue.airports.service;
 
 import java.util.List;
 import local.kaue.airports.DTO.AirportMinDTO;
+import local.kaue.airports.DTO.AirportNearMeDTO;
 import local.kaue.airports.entities.Airport;
+import local.kaue.airports.projections.AirportNearMeProjection;
 import local.kaue.airports.repositories.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +51,14 @@ public class AirportService {
   public Airport findByIataCode(String iataCode){
       Airport result = airportRepository.findByIataCode(iataCode);
       return result;
+  }
+  
+  public List<AirportNearMeDTO> findNearMe(double latitude, double longitude){
+      List<AirportNearMeProjection> resultNearAirports = airportRepository.findNearMe(latitude, longitude);
+      
+      List<AirportNearMeDTO> resultDTO =  resultNearAirports.stream()
+              .map(x -> new AirportNearMeDTO(x)).toList();
+      
+      return resultDTO;
   }
 }

@@ -2,12 +2,14 @@ package local.kaue.airports.controllers;
 
 import java.util.List;
 import local.kaue.airports.DTO.AirportMinDTO;
+import local.kaue.airports.DTO.AirportNearMeDTO;
 import local.kaue.airports.entities.Airport;
 import local.kaue.airports.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -40,54 +42,71 @@ public class AiportController {
      * @param cityname
      * @return
      */
-
     @GetMapping("/city/{cityName}")
     public ResponseEntity<List<Airport>> findByCityIgnoreCase(@PathVariable String cityName) {
         List<Airport> result = airportService.findByCity(cityName);
-        
-        if(result.isEmpty()){
+
+        if (result.isEmpty()) {
             //ops... lista vazia...
             // not found devolve404
             return ResponseEntity.notFound().build();
-            
-        }else{
+
+        } else {
             //eba tem dados
             return ResponseEntity.ok(result);
-        
+
         }
     }
+
     @GetMapping("/country/{countryName}")
     public ResponseEntity<List<AirportMinDTO>> findCountryIgnoreCase(@PathVariable String countryName) {
-       
-        List<AirportMinDTO> result = airportService.findByCountry(countryName); 
-        if(result.isEmpty()){
+
+        List<AirportMinDTO> result = airportService.findByCountry(countryName);
+        if (result.isEmpty()) {
             //ops... lista vazia...
             // not found devolve404
             return ResponseEntity.notFound().build();
-            
-        }else{
+
+        } else {
             //eba tem dados
             //eba devolve 200
             return ResponseEntity.ok(result);
         }
     }
+
     @GetMapping("/iatacode/{iataCode}")
     public ResponseEntity<Airport> findByIataCode(@PathVariable String iataCode) {
-       Airport result = airportService.findByIataCode(iataCode);
-        
+        Airport result = airportService.findByIataCode(iataCode);
 
-        if(result == null){
+        if (result == null) {
             //ops... lista vazia...
             // not found devolve404
             return ResponseEntity.notFound().build();
-            
-        }else{
+
+        } else {
             //eba tem dados
             //eba devolve 200
             return ResponseEntity.ok(result);
         }
     }
-    
-    
+
+    @GetMapping("/nearme")
+    public ResponseEntity<List<AirportNearMeDTO>> findNearMe(
+            @RequestParam double latitude,
+            @RequestParam double longitude) {
+
+        List<AirportNearMeDTO> result = airportService.findNearMe(latitude, longitude);
+
+        if (result.isEmpty()) {
+            //ops.. lista vazia...
+            //notfound devolve 404
+            return ResponseEntity.notFound().build();
+
+        } else {
+            //eba tem dados
+            //notfound devvolve 404
+            return ResponseEntity.ok(result);
+        }
+    }
 
 }
